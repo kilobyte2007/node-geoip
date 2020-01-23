@@ -429,6 +429,7 @@ function processCityData(src, dest, cb) {
 		var lat;
 		var lon;
 		var area;
+		var postalCode;
 
 		var i;
 
@@ -437,7 +438,7 @@ function processCityData(src, dest, cb) {
 		if (fields[0].match(/:/)) {
 			// IPv6
 			var offset = 0;
-			bsz = 48;
+			bsz = 58;
 			rngip = new Address6(fields[0]);
 			sip = utils.aton6(rngip.startAddress().correctForm());
 			eip = utils.aton6(rngip.endAddress().correctForm());
@@ -457,16 +458,18 @@ function processCityData(src, dest, cb) {
 				offset += 4;
 			}
 			b.writeUInt32BE(locId>>>0, 32);
-			
+
+			postalCode = fields[6];
 			lat = Math.round(parseFloat(fields[7]) * 10000);
 			lon = Math.round(parseFloat(fields[8]) * 10000);
 			area = parseInt(fields[9], 10);
 			b.writeInt32BE(lat,36);
 			b.writeInt32BE(lon,40);
 			b.writeInt32BE(area,44);
+			b.write(postalCode,48);
 		} else {
 			// IPv4
-			bsz = 24;
+			bsz = 34;
 
 			rngip = new Address4(fields[0]);
 			sip = parseInt(rngip.startAddress().bigInteger(),10);
@@ -479,12 +482,14 @@ function processCityData(src, dest, cb) {
 			b.writeUInt32BE(eip>>>0, 4);
 			b.writeUInt32BE(locId>>>0, 8);
 
+			postalCode = fields[6];
 			lat = Math.round(parseFloat(fields[7]) * 10000);
 			lon = Math.round(parseFloat(fields[8]) * 10000);
 			area = parseInt(fields[9], 10);
 			b.writeInt32BE(lat,12);
 			b.writeInt32BE(lon,16);
 			b.writeInt32BE(area,20);
+			b.write(postalCode,24);
 		}
 
 		fs.writeSync(datFile, b, 0, b.length, null);

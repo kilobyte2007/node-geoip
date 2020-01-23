@@ -17,9 +17,6 @@ GeoIP-lite instead attempts to be a fully native JavaScript library.  A converte
 an internal binary format (note that this is different from the binary data format provided by MaxMind).  The geoip module uses this
 binary file to lookup IP addresses and return the country, region and city that it maps to.
 
-Both IPv4 and IPv6 addresses are supported, however since the GeoLite IPv6 database does not currently contain any city or region
-information, city, region and postal code lookups are only supported for IPv4.
-
 philosophy
 ----------
 
@@ -55,7 +52,8 @@ console.log(geo);
   city: 'San Antonio',
   ll: [ 29.4969, -98.4032 ],
   metro: 641,
-  area: 1000 }
+  area: 1000,
+  postalCode:  '04300'
 
 ```
 
